@@ -1,0 +1,40 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Smart Technology scent diffuser",
+        "description": "Enter the diffuser Bluetooth address. Keep it powered on and nearby.",
+        "data": {
+          "address": "Bluetooth address",
+          "name": "Name"
+        },
+        "data_description": {
+          "address": "For example, DC:04:5A:2D:55:5A.",
+          "name": "The name shown in Home Assistant."
+        }
+      },
+      "confirm": {
+        "title": "Add discovered diffuser?",
+        "description": "Set up {name}."
+      }
+    },
+    "abort": {
+      "already_configured": "This diffuser is already configured.",
+      "not_supported": "This Bluetooth device is not a supported Scent Tech diffuser."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Bluetooth protocol options",
+        "description": "The proven single-write mode is recommended. Enable the wake packet only if your diffuser does not react.",
+        "data": {
+          "send_wake_packet": "Send wake packet before commands"
+        },
+        "data_description": {
+          "send_wake_packet": "Adds the captured 55 AA 01 47 B9 5A packet before each ON/OFF packet. This may cause extra beeps."
+        }
+      }
+    }
+  }
+}
