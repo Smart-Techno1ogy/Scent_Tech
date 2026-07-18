@@ -8,7 +8,7 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import ScentTechConfigEntry
-from .const import DOMAIN
+from .const import DOMAIN, MANUFACTURER, MODEL
 
 
 async def async_setup_entry(
@@ -35,8 +35,8 @@ class ScentTechDispenseButton(ButtonEntity):
             identifiers={(DOMAIN, self._client.address)},
             connections={("bluetooth", self._client.address)},
             name=self._client.name,
-            manufacturer="Smart Technology",
-            model="Scent Tech B30N BLE Diffuser",
+            manufacturer=MANUFACTURER,
+            model=MODEL,
         )
 
     @property

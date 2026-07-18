@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Callable
 from dataclasses import dataclass
 import logging
 from time import monotonic
-from collections.abc import Callable
 from typing import Any
 
 from bleak import BleakClient
@@ -25,9 +25,13 @@ from .const import (
     COMMAND_WAKE,
     MANUAL_DISPENSE_SECONDS,
     PAUSE_TIME_DEFAULT,
+    PAUSE_TIME_MAX,
+    PAUSE_TIME_MIN,
     PRESET_CUSTOM,
     PRESET_VALUES,
     SPRAY_DURATION_DEFAULT,
+    SPRAY_DURATION_MAX,
+    SPRAY_DURATION_MIN,
     SCHEDULE_ENABLED_DEFAULT,
 )
 
@@ -180,7 +184,6 @@ class ScentTechClient:
             self.diagnostics.last_error = message
             raise HomeAssistantError(message) from err
 
-
     @staticmethod
     def _build_packet(command: int, data: bytes) -> bytes:
         """Build a framed Scent Tech packet with its protocol checksum."""
@@ -220,6 +223,18 @@ class ScentTechClient:
             pause_time = stop_time
         new_duration = self.spray_duration if spray_duration is None else spray_duration
         new_pause = self.pause_time if pause_time is None else pause_time
+
+        if not SPRAY_DURATION_MIN <= new_duration <= SPRAY_DURATION_MAX:
+            raise HomeAssistantError(
+                f"Spray duration must be between {SPRAY_DURATION_MIN} and "
+                f"{SPRAY_DURATION_MAX} seconds"
+            )
+        if not PAUSE_TIME_MIN <= new_pause <= PAUSE_TIME_MAX:
+            raise HomeAssistantError(
+                f"Pause time must be between {PAUSE_TIME_MIN} and "
+                f"{PAUSE_TIME_MAX} seconds"
+            )
+
         payload = self.build_settings_packet(
             new_duration, new_pause, self.schedule_enabled
         )

@@ -6,9 +6,10 @@ from dataclasses import asdict
 from typing import Any
 
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.redact import async_redact_data
 
 from . import ScentTechConfigEntry
-from .const import MANUAL_DISPENSE_SECONDS
+from .const import CONF_ADDRESS, MANUAL_DISPENSE_SECONDS
 
 
 async def async_get_config_entry_diagnostics(
@@ -20,9 +21,12 @@ async def async_get_config_entry_diagnostics(
         "entry": {
             "title": entry.title,
             "version": entry.version,
+            "minor_version": entry.minor_version,
+            "data": async_redact_data(dict(entry.data), {CONF_ADDRESS}),
+            "options": dict(entry.options),
         },
         "device": {
-            "address": client.address,
+            "address": "**REDACTED**",
             "name": client.name,
             "connected": client.is_connected,
         },

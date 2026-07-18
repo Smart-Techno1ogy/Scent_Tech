@@ -11,6 +11,8 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from . import ScentTechConfigEntry
 from .const import (
     DOMAIN,
+    MANUFACTURER,
+    MODEL,
     PAUSE_TIME_MAX,
     PAUSE_TIME_MIN,
     PAUSE_TIME_STEP,
@@ -25,7 +27,9 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up diffuser setting entities."""
-    async_add_entities([ScentTechSprayDurationNumber(entry), ScentTechPauseTimeNumber(entry)])
+    async_add_entities(
+        [ScentTechSprayDurationNumber(entry), ScentTechPauseTimeNumber(entry)]
+    )
 
 
 class ScentTechNumberBase(NumberEntity):
@@ -42,8 +46,8 @@ class ScentTechNumberBase(NumberEntity):
             identifiers={(DOMAIN, self._client.address)},
             connections={("bluetooth", self._client.address)},
             name=self._client.name,
-            manufacturer="Smart Technology",
-            model="Scent Tech B30N BLE Diffuser",
+            manufacturer=MANUFACTURER,
+            model=MODEL,
         )
 
     async def async_added_to_hass(self) -> None:
